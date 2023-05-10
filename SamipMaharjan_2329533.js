@@ -7,26 +7,52 @@ document.addEventListener(`DOMContentLoaded`, () => {
 
     const searchBtn = document.querySelector('.search-btn');
 
+    //Navigating between weather history and homescreen
+
+    const application = document.querySelector(".App"); 
+    const history_page = document.querySelector(".App2"); 
+    var history_button = document.querySelector('.history-button a');
+    var back_button = document.querySelector('.icon2 a'); 
+
+
+    history_button.addEventListener('mouseup', function(event){
+        application.style.display = 'none';
+        history_page.style.display = 'flex';
+    })
+    back_button.addEventListener('mouseup', function(event){
+        application.style.display = 'block';
+        history_page.style.display = 'none';
+    })
+
+
     //When the user searches for a city and clicks the search button
     searchBtn.addEventListener( 'mousedown', () => {
         const cityName = document.querySelector('.search-txt').value;
         const weatherData = localStorage.getItem( cityName ); 
-        
+
         if ( weatherData == null )
         {
             console.log(cityName);
             execute_server_php( cityName );            
         }
+        else
+        {
+            display_data_in_DOM( weatherData );
+            display_history_data( weatherData );
+        }
+    }
 
-    })
+    );
 
-    //WHen the user searches for a city and presses enter
+
+    //When the user searches for a city and presses enter
     document.querySelector('.search-txt').addEventListener('keyup', function (event){
         if (event.key == "Enter" ){
             const cityName = document.querySelector('.search-txt').value;
             let weatherData = localStorage.getItem( cityName ); 
-            weatherData = JSON.parse( weatherData);
+            weatherData = JSON.parse( weatherData );
             
+            //if data is not found in local storage fetch the data
             if ( weatherData == null )
             {
                 console.log(cityName);
@@ -35,6 +61,7 @@ document.addEventListener(`DOMContentLoaded`, () => {
             else
             {
                 display_data_in_DOM( weatherData );
+                display_history_data( weatherData );
             }
         }
     })
@@ -42,6 +69,8 @@ document.addEventListener(`DOMContentLoaded`, () => {
 
     //Executes the server.php file 
     function execute_server_php ( cityName ) {  
+        console.log("server.php");
+
         const xhr = new XMLHttpRequest();
         
         // sets up the parameters for xhr.open method 
@@ -66,6 +95,7 @@ document.addEventListener(`DOMContentLoaded`, () => {
 
                 //calls the function to display the fetched data
                 display_data_in_DOM( response );
+                display_history_data( response );
             } 
             else 
             {
@@ -82,6 +112,8 @@ document.addEventListener(`DOMContentLoaded`, () => {
 
     //displays the fetched data in html domm
     function display_data_in_DOM( weatherData ){
+        console.log("displaying dom");
+
         const cityName = weatherData['cityName'];
         const weatherDescription = `${weatherData['weather_description']}`;
         const temperature = weatherData['temperature'];
@@ -109,7 +141,7 @@ document.addEventListener(`DOMContentLoaded`, () => {
         store_data_in_localStorage( cityName, weatherData )
     }
 
-
+    //Stores/updates the data in localstorage
     function store_data_in_localStorage ( cityName, weatherData ) {
         console.log("Stored")
         weatherData = JSON.stringify( weatherData );
@@ -172,6 +204,86 @@ document.addEventListener(`DOMContentLoaded`, () => {
 
             }
     }
+
+    function display_history_data( weatherData ){
+        console.log("display history data")
+        const historyData = document.querySelector('#historyData');
+
+        historyData.innerHTML = ``;
+
+        //loop for creating 7 divs, and assigning values to them.
+        for( let i = 0; i < 7; i++ )
+        { 
+            const div = document.createElement('div');
+            div.classList.add('history');
+            var dateString = weatherData[`${i}`]["date"]; // Your date string
+            var day = getDayOfWeek(dateString);
+            console.log(day);
+            let avg_temp = (parseInt(weatherData[`${i}`]['max_temp'])+parseInt( weatherData[`${i}`][ 'min_temp' ])/2);
+
+
+            div.innerHTML = `
+            <div class = 'date2'>
+                 ${weatherData[`${i}`]["date"]}
+             </div>
+
+             <div class = 'weather_details'>
+
+                 <div class = 'day'>
+
+                     <div>
+                       <span style = 'font-size: 0.8rem';> ${day}
+                     </div>
+
+                 </div>
+
+                 <div class = 'additional_details'>
+
+                     <div class = 'upper_section'> 
+
+                         <div class = 'max-temp'> 
+                              <span style = 'font-size: 0.8rem';>Avg-temp:</span> 
+                              ${avg_temp}°C
+                         </div> 
+                        
+                         <div class = 'precipitation'> 
+                              <span style = 'font-size: 0.8rem';>Precipitation: </span>${weatherData[`${i}`]['precipitation']} mm
+                         </div>
+
+                     </div>
+
+                     <div class = 'lower_section'>
+
+                         <div class = 'humidity'> 
+                            <span style = 'font-size: 0.8rem';>Humidity: ${weatherData[`${i}`]['humidity']} %
+                         </div> 
+                        
+                         <div class = 'wind'> 
+                            <span style = 'font-size: 0.8rem';>Wind: </span>
+                            ${weatherData[`${i}`]['wind']} km/h
+                         </div>
+
+                     </div>    
+
+                 </div> 
+
+             </div>
+
+         `
+            
+            historyData.appendChild( div );
+
+        }
+    }
+
+    function getDayOfWeek(dateString) {
+        var daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+        var dateObject = new Date(dateString);
+        var dayIndex = dateObject.getDay();
+        return daysOfWeek[dayIndex];
+      }
+      
+
 
     // function getGeographicalLocationAPI( cityName = 'Windsor' ){
     //     fetch(`http://api.openweathermap.org/geo/1.0/direct?q=${cityName}&appid=9964006f86896128a73526b1d2b01786`)

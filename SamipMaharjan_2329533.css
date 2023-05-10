@@ -8,9 +8,11 @@
 :root{
     background-color: #ffffff;
 }
+
 body{
     padding: 1px;
 }
+
 .App{
     background-color: rgba(32, 33, 35, 0.3);
     height: 560px; 
@@ -127,6 +129,7 @@ body{
 }
 .for-flex{
     display: flex; 
+    justify-content: space-between;
     align-items: baseline;
 }
 .temperature h3{
@@ -137,6 +140,22 @@ body{
 }
 .temperature span{
     height: 
+}
+.temperature-details{
+    display: flex; 
+    align-items: baseline;
+
+}
+.history-button a{
+    color: white; 
+    padding: 6px; 
+    text-decoration: none;
+    border-radius: 8px; 
+    background-color: rgba(32, 33, 35, 0.3);
+    /* backdrop-filter: blur(100px); */
+}
+.history-button a:hover{
+    background-color: #130f40;
 }
 /* bottom section  */
 
@@ -154,3 +173,87 @@ body{
     align-items: center; 
 }
 /* footer-section  */
+
+
+/* app 2 */
+
+.App2{
+    /* background-color: rgba(32, 33, 35); */
+    /* background-color: linear-gradient(to bottom, #130f40, #30336b) ; */
+    background-image: linear-gradient(to bottom, #130f40, #30336b);
+
+    height: 560px; 
+    width: 340px;
+    margin: 15px auto;
+    color: white;
+    border-radius: 14px;
+    background-blend-mode: multiply;
+    display: none; 
+    flex-direction: column;
+    justify-content: space-evenly;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+.history{
+    display: flex; 
+    flex-direction: column;
+    margin: 0px 10px 0px 10px; 
+    /* justify-content: space-evenly; */
+    border: solid 2px yellow; 
+    border-radius: 10px;
+    color: white; 
+
+}
+.date2{
+    text-align: center;
+}
+.day{
+    display: flex; 
+    flex-direction: column;
+    align-items: center;
+    font-size: 0.8rem; 
+}
+.weather_details{
+    display: flex; 
+    justify-content: space-evenly;
+    width: 100%;    
+}
+.additional_details{
+    display: flex; 
+    width: 80%;
+    justify-content: space-evenly;
+}
+.upper_section{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+}
+.lower_section{
+    display: flex; 
+    flex-direction: column;
+    justify-content: space-evenly;
+}
+
+.max-temp{
+    display: flex; 
+    justify-content: space-between;
+}
+.wind{
+    display: flex; 
+    justify-content: space-between;
+}
+.additional_details{
+    font-size: 0.8rem; 
+}
+.icon2{
+    margin-left: 20px; 
+    display: flex; 
+    
+}
+.icon2 a{
+    color: white; 
+}
+.history-text{
+    width: 95%; 
+    display: flex; 
+    justify-content: center;
+}

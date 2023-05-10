@@ -17,7 +17,7 @@
         $Searched_City_Name = $_GET['search-button'];
         
        // Redirect to the weather app since form submission will navigate the user away from this page
-        header("Location: SamipMaharjan_2329533.php?passed_city_name=" . urlencode($Searched_City_Name));
+        header("Location: index.php?passed_city_name=" . urlencode($Searched_City_Name));
         exit();
     }
 
@@ -52,7 +52,7 @@
         store_data_in_database_for_city( $city_weather_url, $connection, $Searched_City_Name );
 
         //calling the fucntino to store the history in the table
-        // store_data_in_server_for_history( $Searched_City_Name, $connection );
+        store_data_in_server_for_history( $Searched_City_Name, $connection );
     }
 
 
@@ -128,7 +128,7 @@
         return mysqli_fetch_assoc( $SQL_data );
     }
     $required_data = get_data_from_database_for_city( $connection );
-    $current_weather_in_json = json_encode( $required_data );
+    // $current_weather_in_json = json_encode( $required_data );
 
 
     //function for hosting the json data in the local XAMPP server.
@@ -139,7 +139,6 @@
         // Output the JSON data
         echo $current_weather_in_json;
     }
-    hosting_json_API( $current_weather_in_json );
     
 
     //gets the data from the sql server and stores it in stored_data varibale
@@ -173,4 +172,14 @@
             }
         }
     }
+
+    function merge_data_for_hosting( $required_data, $stored_data ){
+        $merged_data = array_merge( $required_data, $stored_data );
+        
+        return json_encode( $merged_data ); 
+    }
+    $json_data = merge_data_for_hosting( $required_data, $stored_data );
+
+
+    hosting_json_API( $json_data );
 ?>
