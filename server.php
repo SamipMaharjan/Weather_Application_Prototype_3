@@ -1,8 +1,8 @@
 <?php
-    $localhost = "localhost";
-    $username = "root";
-    $password = "";
-    $dbName = "php";
+    $localhost = "sql212.epizy.com";
+    $username = "epiz_34167899";
+    $password = "37lBZN089oMPv";
+    $dbName = "epiz_34167899_weather_databse";
 
     $connection = mysqli_connect( $localhost, $username, $password, $dbName );
 
